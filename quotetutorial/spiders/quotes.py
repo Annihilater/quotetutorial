@@ -21,8 +21,10 @@ class QuotesSpider(scrapy.Spider):
             # item['author'] = author
             # item['tags'] = tags
             for field in item.fields:
-                item[field] = eval(field)
-                print(eval(field))
+                try:
+                    item[field] = eval(field)
+                except NameError:
+                    self.logger.debug('Field is not Defined' + field)
             yield item
 
         next_page = response.css('.next a::attr(href)').extract_first()
